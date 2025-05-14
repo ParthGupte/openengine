@@ -1,5 +1,5 @@
 from openengine.data.yahoo_connector import YahooFinanceConnector
-from openengine.strategies.sample_strategy import SampleStrategy
+from openengine.strategies.sample_strategy import SampleStrategy, MarubozuStrategy
 from openengine.engine.backtester import Backtester
 from openengine.utilities.config import INITIAL_CAPITAL
 
@@ -14,6 +14,7 @@ def main():
     data = data_connector.fetch_data(ticker, start_date, end_date, interval="1d")
     
     # Initialize strategy
+    # strategy = MarubozuStrategy()
     strategy = SampleStrategy()
     
     # Create and run the backtester

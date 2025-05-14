@@ -21,3 +21,33 @@ class SampleStrategy(BaseStrategy):
         # A simple dummy signal for live data:
         price = float(data_point.get("price", 0))
         return 1.0 if price % 2 == 0 else -1.0
+
+class MarubozuStrategy(BaseStrategy):
+    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+        data = data.copy()
+        signals = pd.Series(0, index=data.index, dtype=float)
+        for i in range(1,len(data)):
+            data_upto_yesterday = data.iloc[:i]
+            signals.iloc[i] = self.generate_signal_from_data_point(data_upto_yesterday)
+        return signals
+    
+    def marubozu(self,X):
+        open, high, low, close = X[0], X[1], X[2], X[3]
+        if open == low and close == high:
+            return {'marubozu': True, 'bull': True}
+        elif open == high and close == low:
+            return {'marubozu': True, 'bull': False}
+        else:
+            return {'marubozu': False, 'bull': None}
+    
+    def generate_signal_from_data_point(self, data_upto_yesterday: pd.DataFrame):
+        # X = ['o','h','l','c']
+        O, H, L, C = data_upto_yesterday['Open'].iloc[-1], data_upto_yesterday['High'].iloc[-1], data_upto_yesterday['Low'].iloc[-1], data_upto_yesterday['Close'].iloc[-1]
+        X = [O.values[0],H.values[0],L.values[0],C.values[0]]
+        output = self.marubozu(X)
+        if(output['bull']==True):
+            return 1
+        elif(output['bull']==False):
+            return -1
+        else:
+            return 0
