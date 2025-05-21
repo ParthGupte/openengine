@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from .base_strategy import BaseStrategy
+import math as mt
 
 class SampleStrategy(BaseStrategy):
     def generate_signals(self, data: pd.DataFrame) -> pd.Series:
@@ -32,10 +33,11 @@ class MarubozuStrategy(BaseStrategy):
         return signals
     
     def marubozu(self,X):
+        error = lambda p1,p2: mt.fabs((p2-p1)/p1)
         open, high, low, close = X[0], X[1], X[2], X[3]
-        if open == low and close == high:
+        if error(open,low) < 0.05 and error(close,high) < 0.05:
             return {'marubozu': True, 'bull': True}
-        elif open == high and close == low:
+        elif error(open,high) < 0.05 and error(close,low) < 0.05:
             return {'marubozu': True, 'bull': False}
         else:
             return {'marubozu': False, 'bull': None}
@@ -51,3 +53,4 @@ class MarubozuStrategy(BaseStrategy):
             return -1
         else:
             return 0
+    
