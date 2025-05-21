@@ -24,6 +24,10 @@ class SampleStrategy(BaseStrategy):
         return 1.0 if price % 2 == 0 else -1.0
 
 class MarubozuStrategy(BaseStrategy):
+    def __init__(self,margin_of_error = 0.05):
+        super().__init__()
+        self.margin_of_error = margin_of_error
+        
     def generate_signals(self, data: pd.DataFrame) -> pd.Series:
         data = data.copy()
         signals = pd.Series(0, index=data.index, dtype=float)
@@ -35,9 +39,9 @@ class MarubozuStrategy(BaseStrategy):
     def marubozu(self,X):
         error = lambda p1,p2: mt.fabs((p2-p1)/p1)
         open, high, low, close = X[0], X[1], X[2], X[3]
-        if error(open,low) < 0.05 and error(close,high) < 0.05:
+        if error(open,low) < self.margin_of_error and error(close,high) < self.margin_of_error:
             return {'marubozu': True, 'bull': True}
-        elif error(open,high) < 0.05 and error(close,low) < 0.05:
+        elif error(open,high) < self.margin_of_error and error(close,low) < self.margin_of_error:
             return {'marubozu': True, 'bull': False}
         else:
             return {'marubozu': False, 'bull': None}
