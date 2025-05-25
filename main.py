@@ -28,8 +28,8 @@ def date_range_to_decimal_years(start_date: str, end_date: str) -> float:
 def main():
     # Define parameters for data fetching
     ticker = "RELIANCE.NS"  # Example: Reliance Industries on NSE
-    start_date = "2020-01-01"
-    end_date = "2025-01-01"
+    start_date = "2015-01-01"
+    end_date = "2020-01-01"
 
     # Fetch historical data using the YahooFinanceConnector
     data_connector = YahooFinanceConnector()
@@ -46,7 +46,9 @@ def main():
     print("Backtesting complete. Final portfolio snapshot:")
     print(portfolio.tail())
     print("Annualised returns:",((portfolio.tail().iloc[-1]["total"]/INITIAL_CAPITAL)**(1/date_range_to_decimal_years(start_date,end_date))-1)*100)
-    print(data)
+    start_price = data.iloc[0]['Close'].item()
+    end_price = data.iloc[-1]['Close'].item()
+    print("Buy and Hold Returns:",(((end_price/start_price)**(1/date_range_to_decimal_years(start_date,end_date)))-1)*100)
 
 if __name__ == "__main__":
     main()
