@@ -36,8 +36,9 @@ class Backtester:
                 cash_left -= float(current_position * price)
             elif float(signal) == -1 and current_position >= 0:
                 pre_sell_pos = current_position
-                cash_left += float(pre_sell_pos*price)
-                current_position = self.order_manager.sell(date, price, previous_cash)
+                if pre_sell_pos != 0:
+                    cash_left += float(pre_sell_pos*price)
+                    current_position = self.order_manager.sell(date, price, previous_cash)
         
 
             portfolio.loc[date, 'holdings'] = float(current_position * price)

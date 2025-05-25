@@ -9,7 +9,7 @@ class OrderManager:
         return self.position
 
     def sell(self, timestamp, price, available_cash):
-        shares = -abs(self.position)
-        self.position = shares
+        shares = self.position
+        self.position -= shares
         print(f"[{timestamp}] SELL: {abs(shares)} shares at {price}")
         return self.position
