@@ -51,10 +51,10 @@ class MarubozuStrategy(BaseStrategy):
         O, H, L, C = data_upto_yesterday['Open'].iloc[-1], data_upto_yesterday['High'].iloc[-1], data_upto_yesterday['Low'].iloc[-1], data_upto_yesterday['Close'].iloc[-1]
         X = [O.values[0],H.values[0],L.values[0],C.values[0]]
         output = self.marubozu(X)
-        if(output['bull']==True):
-            return 1
-        elif(output['bull']==False):
-            return -1
+        if output['marubozu']:
+            if output['bull']:
+                return 1
+            elif output['bull']:
+                return -1
         else:
             return 0
-    

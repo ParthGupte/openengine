@@ -36,7 +36,7 @@ def main():
     data = data_connector.fetch_data(ticker, start_date, end_date, interval="1d")
     
     # Initialize strategy
-    strategy = MarubozuStrategy(0.005)
+    strategy = MarubozuStrategy(0.1)
     # strategy = SampleStrategy()
     
     # Create and run the backtester
